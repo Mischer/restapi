@@ -1,0 +1,15 @@
+<div class="websocket-test">
+  <h2>WebSocket Test</h2>
+
+  <div class="messages">
+    <h3>Received Messages:</h3>
+    <ul>
+      <li *ngFor="let message of messages">{{ message }}</li>
+    </ul>
+  </div>
+
+  <div class="message-input">
+    <input [(ngModel)]="newMessage" placeholder="Enter message" />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>

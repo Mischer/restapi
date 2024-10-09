@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import {HttpClientModule} from "@angular/common/http";
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Добавляем HttpClientModule
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './signup.component.html'
 })
 export class SignupComponent {
