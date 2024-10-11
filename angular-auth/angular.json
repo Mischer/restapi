@@ -25,9 +25,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/@chrisoakman/chessboardjs/dist/chessboard-1.0.0.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js"
+            ],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
