@@ -1,7 +1,7 @@
 package com.mk.restapi.controllers;
 
 import com.mk.restapi.dto.UserLoginDto;
-import com.mk.restapi.models.User;
+import com.mk.restapi.entity.User;
 import com.mk.restapi.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
