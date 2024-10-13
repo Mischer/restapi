@@ -13,14 +13,14 @@ public class MoveValidatorImpl implements MoveValidator {
     @Override
     public boolean isValid(MoveDto moveDto, Game game) {
         try {
-            // Создаем объект доски на основе текущего состояния FEN
+            // Create a board by current FEN
             Board board = new Board();
             board.loadFromFen(game.getCurrentFen());
 
-            // Создаем объект Move на основе PGN-нотации
+            // Create a move by PGN notation
             Move move = new Move(moveDto.getPgnNotation(), board.getSideToMove());
 
-            // Проверяем, является ли ход легальным
+            // check is the next move is legal
             boolean isLegal = board.legalMoves().contains(move);
 
             return isLegal;

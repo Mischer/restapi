@@ -1,6 +1,6 @@
-package com.mk.restapi.dto;
+package com.mk.restapi.dto.user;
 
-public class UserLoginDto {
+public class LoginUserDto {
     private String username;
     private String password;
 
