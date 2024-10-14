@@ -1,12 +1,15 @@
 import {Component, AfterViewInit, ElementRef, ViewChild, Inject, PLATFORM_ID} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
+import { GameService } from './game.service';
 import {Chess, Square} from 'chess.js';
+import {FormsModule} from "@angular/forms";
 declare var Chessboard: any;
 
 @Component({
   selector: 'app-chessboard',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, HttpClientModule],
   templateUrl: './chessboard.component.html',
   styleUrl: './chessboard.component.css'
 })
@@ -15,25 +18,58 @@ export class ChessboardComponent implements AfterViewInit {
   private board: any;
   private game: Chess;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {
+  whitePlayerId: number | null = null;
+  blackPlayerId: number | null = null;
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    private gameService: GameService
+  ) {
     this.game = new Chess();
   }
 
   ngAfterViewInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.loadScript().then(() => {
-        this.board = Chessboard(this.boardElement.nativeElement, {
-          draggable: true,
-          position: 'start',
-          pieceTheme: 'assets/img/chesspieces/wikipedia/{piece}.png',
-          onDrop: this.onDrop.bind(this),
-          moveSpeed: 0,
-          showNotation: false
-        });
-      }).catch(error => {
-        console.error('Error loading chessboard.js:', error);
-      });
+    // moved to createGame()
+  }
+
+  createGame(): void {
+    if (this.whitePlayerId == null || this.blackPlayerId == null) {
+      alert('Fill the player ids');
+      return;
     }
+
+    const requestBody = {
+      whitePlayerId: this.whitePlayerId,
+      blackPlayerId: this.blackPlayerId
+    };
+
+    this.gameService.createGame(requestBody).subscribe(
+      (response) => {
+        console.log('Game is created:', response);
+        this.game.reset();
+        this.game.load(response.currentFen);
+
+        // Init the board
+        if (isPlatformBrowser(this.platformId)) {
+          this.loadScript().then(() => {
+            this.board = Chessboard(this.boardElement.nativeElement, {
+              draggable: true,
+              position: response.currentFen,
+              pieceTheme: 'assets/img/chesspieces/wikipedia/{piece}.png',
+              onDrop: this.onDrop.bind(this),
+              moveSpeed: 0,
+              showNotation: false
+            });
+          }).catch(error => {
+            console.error('Error loading chessboard.js:', error);
+          });
+        }
+      },
+      (error) => {
+        console.error('Error creating game:', error);
+        alert('Error creating game: ' + error.error.message);
+      }
+    );
   }
 
   private loadScript(): Promise<void> {
@@ -51,7 +87,7 @@ export class ChessboardComponent implements AfterViewInit {
   }
 
   onDrop(source: string, target: string): any {
-    // Проверяем, находится ли целевая клетка в пределах доски
+    // Check the square in the board area
     const isValidTarget = /^[a-h][1-8]$/.test(target);
 
     if (!isValidTarget) {
@@ -63,11 +99,11 @@ export class ChessboardComponent implements AfterViewInit {
     const isMoveLegal = possibleMoves.some((move) => move.to === target);
 
     if (!isMoveLegal) {
-      setTimeout(() => this.board.position(this.game.fen()), 0); // Возвращаем фигуру
+      setTimeout(() => this.board.position(this.game.fen()), 0); // Take one move back
       return 'snapback';
     }
 
-    // Выполняем ход
+    // Make a move
     const move = this.game.move({
       from: source,
       to: target,
@@ -75,23 +111,12 @@ export class ChessboardComponent implements AfterViewInit {
     });
 
     if (move === null) {
-      setTimeout(() => this.board.position(this.game.fen()), 0); // Возвращаем фигуру
+      setTimeout(() => this.board.position(this.game.fen()), 0); // Take one move back
       return 'snapback';
     } else {
       console.log(`Moved ${source} to ${target}`);
     }
 
-    this.updateBoard();
-
-    // Если ход некорректен, возвращаем фигуру на место
-    if (move === null) {
-      setTimeout(() => this.board.position(this.game.fen()), 0);
-      return 'snapback';
-    } else {
-      console.log(`Moved ${source} to ${target}`);
-    }
-
-    // Обновляем позицию доски после успешного хода
     this.updateBoard();
   }
 

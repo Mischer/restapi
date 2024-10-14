@@ -9,6 +9,6 @@ public class FenUtil {
     }
 
     public static String getDefaultFen() {
-        return "начальное FEN-состояние";
+        return "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     }
 }

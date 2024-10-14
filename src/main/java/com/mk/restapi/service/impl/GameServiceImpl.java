@@ -1,26 +1,57 @@
 package com.mk.restapi.service.impl;
 
 import com.mk.restapi.dto.MoveDto;
+import com.mk.restapi.dto.game.CreateGameDto;
 import com.mk.restapi.entity.Game;
+import com.mk.restapi.entity.GameStatus;
 import com.mk.restapi.entity.Move;
 import com.mk.restapi.entity.User;
+import com.mk.restapi.exception.EntityNotFoundException;
 import com.mk.restapi.repository.MoveRepository;
 import com.mk.restapi.repository.GameRepository;
 import com.mk.restapi.exception.GameNotFoundException;
+import com.mk.restapi.repository.UserRepository;
 import com.mk.restapi.service.GameService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mk.restapi.util.FenUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 public class GameServiceImpl implements GameService {
+    private final GameRepository gameRepository;
+    private final MoveRepository moveRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private GameRepository gameRepository;
+    public GameServiceImpl(GameRepository gameRepository,MoveRepository moveRepository, UserRepository userRepository) {
+        this.gameRepository = gameRepository;
+        this.moveRepository = moveRepository;
+        this.userRepository = userRepository;
+    }
 
-    @Autowired
-    private MoveRepository moveRepository;
+    @Override
+    @Transactional
+    public Game createGame(CreateGameDto createGameDto) {
+        User whitePlayer = userRepository.findById(createGameDto.getWhitePlayerId())
+                .orElseThrow(() -> new EntityNotFoundException("White player not found. ID " + createGameDto.getWhitePlayerId()));
+
+        User blackPlayer = userRepository.findById(createGameDto.getBlackPlayerId())
+                .orElseThrow(() -> new EntityNotFoundException("Black player not found. ID " + createGameDto.getBlackPlayerId()));
+
+        if (whitePlayer.getId().equals(blackPlayer.getId())) {
+            throw new IllegalArgumentException("The white and black players should be the different users");
+        }
+
+        Game game = new Game();
+        game.setWhitePlayer(whitePlayer);
+        game.setBlackPlayer(blackPlayer);
+        game.setStatus(GameStatus.NEW);
+        game.setCurrentFen(FenUtil.getDefaultFen());
+
+        return gameRepository.save(game);
+    }
 
     @Override
     public Move processMove(Long gameId, MoveDto moveDto) {
@@ -43,11 +74,6 @@ public class GameServiceImpl implements GameService {
         gameRepository.save(game);
 
         return move;
-    }
-
-    @Override
-    public Game createGame(User whitePlayer, User blackPlayer) {
-        return new Game();
     }
 
     @Override

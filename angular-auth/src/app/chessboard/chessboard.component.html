@@ -3,3 +3,13 @@
   <button (click)="resetBoard()">Reset Board</button>
   <button (click)="clearBoard()">Clear Board</button>
 </div>
+
+<div>
+  <label for="whitePlayerId">ID white player:</label>
+  <input type="number" id="whitePlayerId" [(ngModel)]="whitePlayerId" name="whitePlayerId" required>
+</div>
+<div>
+  <label for="blackPlayerId">ID black player:</label>
+  <input type="number" id="blackPlayerId" [(ngModel)]="blackPlayerId" name="blackPlayerId" required>
+</div>
+<button (click)="createGame()">Create a game</button>

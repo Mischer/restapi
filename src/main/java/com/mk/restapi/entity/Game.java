@@ -1,6 +1,8 @@
 package com.mk.restapi.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +22,8 @@ public class Game {
     @JoinColumn(name = "black_player_id")
     private User blackPlayer;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private GameStatus status;
     @Lob
     private String currentFen;
 
@@ -29,7 +32,10 @@ public class Game {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Move> moves;
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     public Long getId() {
@@ -64,11 +70,11 @@ public class Game {
         this.currentFen = currentFen;
     }
 
-    public String getStatus() {
+    public GameStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(GameStatus status) {
         this.status = status;
     }
 
