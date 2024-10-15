@@ -9,12 +9,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
+/*@Configuration
 @EnableWebSecurity
-@Profile("dev")
+@Profile("dev")*/
 public class SecurityConfigDev {
 
-    @Bean
+/*    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         System.out.println("-----------START SecurityFilterChain DEV-----------------");
         http
@@ -29,5 +29,5 @@ public class SecurityConfigDev {
     public PasswordEncoder passwordEncoder() {
         System.out.println("-----------START PasswordEncoder-----------------");
         return new BCryptPasswordEncoder();
-    }
+    }*/
 }
