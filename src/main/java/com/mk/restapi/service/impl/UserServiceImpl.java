@@ -34,9 +34,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(RegisterUserDto registerUserDto) {
         Optional<User> exitUser = userRepository.findByUsername(registerUserDto.getUsername());
-        if (exitUser != null) {
+        /*if (exitUser != null) { CHECK USER HERE!!!!
             return null;
-        }
+        }*/
 
         User user = new User();
         user.setUsername(registerUserDto.getUsername());
