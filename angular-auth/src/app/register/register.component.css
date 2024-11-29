@@ -1,0 +1,71 @@
+/* Center the form container */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: url('/assets/img/image.webp') no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Style the form */
+.login-form {
+  background-color: rgba(122, 121, 121, 0.9);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-field {
+  width: 100%;
+  margin-bottom: 20px;
+  color: #6A1B9A !important;
+}
+
+/*mat-form-field {
+  width: 100%;
+  color: #333; !* Set label and outline color *!
+}*/
+
+/*input[matInput] {
+  color: #333; !* Set text color *!
+  background-color: rgba(240, 240, 240, 0.9); !* Slightly darker background for input *!
+}*/
+
+/*input[matInput]::placeholder {
+  color: #666; !* Set placeholder color *!
+}*/
+
+/*.mat-form-field-label {
+  color: #6A1B9A !important; !* Ensure label color is dark *!
+}*/
+
+/*.mat-focused .mat-form-field-label {
+  color: #6A1B9A !important; !* Change label color when focused *!
+}*/
+
+/*.mat-focused input[matInput] {
+  color: #6A1B9A !important; !* Change label color when focused *!
+}*/
+
+.mat-form-field-outline {
+  color: #333;
+}
+
+button {
+  width: 100%;
+  background-color: #6A1B9A;
+  color: #ffffff;
+}
+
+button:hover {
+  background-color: #4A148C;
+}
